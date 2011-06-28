@@ -1,0 +1,10 @@
+use File::Slurp qw(edit_file);
+
+#edit_file { s/\r/\n/g } './lib//Plack/Middleware/TemplateToolkit.pm' ;
+edit_file { s/\r/\n/g } './t/40_utf8.t';
+edit_file { s/\r/\n/g } './t/00_compile.t';
+edit_file { s/\r/\n/g } './t/20_enable.t';
+edit_file { s/\r/\n/g } './t/app_tests.pl';
+edit_file { s/\r/\n/g } './t/10_app.t';
+edit_file { s/\r/\n/g } './t/30_errordocs.t';
+edit_file { s/\r/\n/g } './t/90_deprecated.t';

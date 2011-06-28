@@ -7,14 +7,16 @@ META.yml
 Makefile.PL
 README
 app.psgi
+clean
 dist.ini
 lib/Plack/Middleware/TemplateToolkit.pm
 t/00_compile.t
 t/10_app.t
 t/20_enable.t
 t/30_errordocs.t
+t/40_utf8.t
+t/90_deprecated.t
 t/app_tests.pl
-t/release-eol.t
 t/release-no-tabs.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t

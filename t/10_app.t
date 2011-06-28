@@ -5,6 +5,7 @@ use Plack::Middleware::TemplateToolkit;
 use HTTP::Request;
 use File::Spec;
 use Plack::Middleware::ErrorDocument;
+use Template;
 
 BEGIN {
     use lib "t";
@@ -14,11 +15,11 @@ BEGIN {
 my $root = File::Spec->catdir( "t", "root" );
 
 my $app = Plack::Middleware::TemplateToolkit->new(
-    root => $root,    # Required
+    INCLUDE_PATH => $root,
+    POST_CHOMP   => 1
 )->to_app();
 
-$app = Plack::Middleware::ErrorDocument->wrap( $app, 404 => "$root/404.html",
-);
+$app = Plack::Middleware::ErrorDocument->wrap( $app, 404 => "$root/404.html" );
 
 app_tests
     app   => $app,
@@ -59,8 +60,25 @@ app_tests
 
 app_tests
     app => Plack::Middleware::TemplateToolkit->new(
-    root        => $root,
-    pre_process => 'pre.html'
+        INCLUDE_PATH => $root, POST_CHOMP => 1,
+        path         => qr{^/ind},
+    ),
+    tests => [{
+        name    => 'Basic request',
+        request => [ GET => '/index.html' ],
+        content => 'Page value',
+        headers => { 'Content-Type' => 'text/html', },
+    },{   
+        name    => 'Unmatched request',
+        request => [ GET => '/style.css' ],
+        code    => 404,
+    }];
+
+app_tests
+    app => Plack::Middleware::TemplateToolkit->new(
+        INCLUDE_PATH => $root,
+        PRE_PROCESS  => 'pre.html',
+        POST_CHOMP   => 1
     )->to_app(),
     tests => [
     {   name    => 'Basic request with pre_process',
@@ -72,8 +90,9 @@ app_tests
 
 app_tests
     app => Plack::Middleware::TemplateToolkit->new(
-    root    => $root,
-    process => 'process.html'
+        INCLUDE_PATH => $root,
+        PROCESS      => 'process.html',
+        POST_CHOMP   => 1
     )->to_app(),
     tests => [
     {   name    => 'Basic request with pre_process',
@@ -85,8 +104,8 @@ app_tests
 
 app_tests
     app => Plack::Middleware::TemplateToolkit->new(
-    root         => $root,
-    default_type => 'text/plain'
+        INCLUDE_PATH => $root,
+        default_type => 'text/plain'
     )->to_app(),
     tests => [
     {   name    => 'Default MIME type',
@@ -98,8 +117,8 @@ app_tests
 
 app_tests
     app => Plack::Middleware::TemplateToolkit->new(
-    root      => $root,
-    extension => 'html'
+        INCLUDE_PATH => $root,
+        extension => 'html'
     )->to_app(),
     tests => [
     {   name    => 'Forbidden extension',
@@ -112,8 +131,8 @@ app_tests
 
 app_tests
     app => Plack::Middleware::TemplateToolkit->new(
-    root => $root,
-    vars => { foo => 'Hello', bar => ', world!' }
+        INCLUDE_PATH => $root,
+        vars => { foo => 'Hello', bar => ', world!' }
     )->to_app(),
     tests => [
     {   name    => 'Variables in templates',
@@ -122,18 +141,56 @@ app_tests
     }
     ];
 
-app_tests app => Plack::Middleware::TemplateToolkit->new(
-    root => $root,
-    vars => sub {
-        my $req = shift;
-        return { foo => 'Hi, ', bar => $req->param('who') };
-    }
-    )->to_app(),
-    tests => [
-    {   name    => 'Variables in templates',
+my $template = Template->new( INCLUDE_PATH => $root );
+
+app_tests 
+    app => Plack::Middleware::TemplateToolkit->new(
+        tt   => $template,
+        vars => sub {
+            my $req = shift;
+            return { foo => 'Hi, ', bar => $req->param('who') };
+        }
+    ),
+    tests => [{   
+        name    => 'Variables in templates',
         request => [ GET => '/vars.html?who=you' ],
         content => 'Hi, you',
-    }
-    ];
+    }];
+
+$app = Plack::Middleware::TemplateToolkit->new(
+    INCLUDE_PATH => $root, POST_CHOMP => 1 );
+
+app_tests 
+    app => builder {
+        enable sub { my $app = shift; sub { 
+            my $env = shift;
+            # test for empty PATH_INFO
+            $env->{PATH_INFO} = '' if $env->{PATH_INFO} eq '/index.html'; 
+            $app->($env);
+        } };
+        $app;
+    },
+    tests => [{
+        name    => 'use as plain app',
+        request => [ GET => '/index.html' ],
+        content => 'Page value',
+        code    => 200,
+    }];
+
+app_tests 
+    app => builder {
+        enable sub { my $app = shift; sub { 
+            my $env = shift;
+            $env->{'tt.vars'} = { bar => 'Do' };
+            $app->($env);
+        } };
+        $app;
+    },
+    tests => [{
+        name    => 'with mixed variable sources',
+        request => [ GET => '/vars.html?foo=Ho' ],
+        content => 'HoDo',
+        code    => 200,
+    }];
 
 done_testing;

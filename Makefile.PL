@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-BEGIN { require 5.008_001; }
+use 5.008_001;
 
 use ExtUtils::MakeMaker 6.30;
 
@@ -17,7 +17,9 @@ my %WriteMakefileArgs = (
     'Plack::Builder' => '0',
     'Plack::Middleware::ErrorDocument' => '0',
     'Plack::Test' => '0',
-    'Test::More' => '0'
+    'Test::More' => '0.98',
+    'Test::Warn' => '0',
+    'utf8' => '0'
   },
   'CONFIGURE_REQUIRES' => {
     'ExtUtils::MakeMaker' => '6.30'
@@ -27,14 +29,18 @@ my %WriteMakefileArgs = (
   'LICENSE' => 'perl',
   'NAME' => 'Plack::Middleware::TemplateToolkit',
   'PREREQ_PM' => {
+    'Carp' => '0',
+    'Encode' => '0',
+    'HTTP::Status' => '0',
     'Plack::MIME' => '0',
     'Plack::Middleware' => '0',
     'Plack::Request' => '0.994',
     'Plack::Util::Accessor' => '0',
+    'Scalar::Util' => '0',
     'Template' => '2',
     'parent' => '0'
   },
-  'VERSION' => '0.1',
+  'VERSION' => '0.15',
   'test' => {
     'TESTS' => 't/*.t'
   }

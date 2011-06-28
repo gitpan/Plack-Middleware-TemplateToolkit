@@ -13,13 +13,41 @@ BEGIN {
 
 my $root = File::Spec->catdir( "t", "root" );
 
-app_tests
-    app => Plack::Middleware::TemplateToolkit->new(
-    root => $root,
+my $app = Plack::Middleware::TemplateToolkit->new(
+    INCLUDE_PATH => $root, POST_CHOMP   => 1,
     404  => '404.html',
     500  => '500.html',
     200  => 'ignore_this',
-    ),
+);
+
+# must not die, even if prepare_app has not been called
+my $err = $app->process_error;
+
+$err = $app->process_error( 424, undef, 'text/html' );
+is_deeply $err, [424,['Content-Type'=>'text/html'],
+                     ['Failed Dependency']], 'process_error 424 (unprepared)';
+
+$err = $app->process_error;
+is_deeply $err, [500,['Content-Type'=>'text/plain'],
+                     ['Internal Server Error']], 'process_error 500 (unprepared)';
+
+$app->prepare_app; # in general this should have been called before
+
+$err = $app->process_error;
+is_deeply $err, [500,['Content-Type'=>'text/html'],
+                     ['Server error: Internal Server Error']], 'process_error 500';
+
+$err = $app->process_error( 500, 'Sorry!' );
+is_deeply $err, [500,['Content-Type'=>'text/html'],
+                     ['Server error: Sorry!']], 'process_error 500 with message';
+
+$err = $app->process_error( 404 );
+is_deeply $err, [404,['Content-Type'=>'text/html'],
+                     ['404-page']], 'process_error 404';
+
+
+app_tests
+    app => $app,
     tests => [
     {   name    => 'Basic request',
         request => [ GET => '/index.html' ],
@@ -45,9 +73,10 @@ app_tests
 
 app_tests
     app => Plack::Middleware::TemplateToolkit->new(
-    root => $root,
-    404  => '404_missing.html',
-    500  => '500.html',
+        INCLUDE_PATH => $root,
+        POST_CHOMP   => 1,
+        404  => '404_missing.html',
+        500  => '500.html',
     ),
     tests => [
     {   name    => '404 error template missing but we have 500 template',
@@ -61,9 +90,9 @@ app_tests
 
 app_tests
     app => Plack::Middleware::TemplateToolkit->new(
-    root => $root,
-    404  => '404_missing.html',
-    500  => '500_missing.html',
+        INCLUDE_PATH => $root,
+        404  => '404_missing.html',
+        500  => '500_missing.html',
     ),
     tests => [
     {   name => '404 error template missing and 500 error template missing',
@@ -85,5 +114,24 @@ app_tests
         ]
     }
     ];
+
+app_tests
+    app => Plack::Middleware::TemplateToolkit->new(
+        INCLUDE_PATH => $root, 
+        POST_CHOMP => 1,
+        404  => '404.html',
+        path => sub { shift =~ qr{^/ind} },
+    ),
+    tests => [{
+        name    => 'Path checked via sub',
+        request => [ GET => '/index.html' ],
+        content => 'Page value',
+    },{   
+        name    => 'Unmatched request, 404 as template',
+        request => [ GET => '/style.css' ],
+        code    => 404,
+        content => '404-page',
+    }];
+
 
 done_testing;

@@ -7,8 +7,10 @@ META.yml
 Makefile.PL
 README
 app.psgi
-clean
 dist.ini
+examples/hello/app.psgi
+examples/hello/index.html
+lib/Plack/Middleware/Debug/TemplateToolkit.pm
 lib/Plack/Middleware/TemplateToolkit.pm
 t/00_compile.t
 t/10_app.t
@@ -27,5 +29,7 @@ t/root/index.html
 t/root/noext
 t/root/pre.html
 t/root/process.html
+t/root/req.html
 t/root/style.css
+t/root/unicode.html
 t/root/vars.html

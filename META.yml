@@ -15,7 +15,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 6.30
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.200007, CPAN::Meta::Converter version 2.110440'
+generated_by: 'Dist::Zilla version 4.300000, CPAN::Meta::Converter version 2.110930001'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -24,17 +24,22 @@ name: Plack-Middleware-TemplateToolkit
 requires:
   Carp: 0
   Encode: 0
+  Exporter: 0
   HTTP::Status: 0
   Plack::MIME: 0
   Plack::Middleware: 0
   Plack::Middleware::Debug::Base: 0
+  Plack::Middleware::Debug::Timer: 0
   Plack::Request: 0.994
   Plack::Util::Accessor: 0
   Scalar::Util: 0
   Template: 2
+  Time::HiRes: 0
   parent: 0
   perl: 5.008_001
+  strict: 0
+  warnings: 0
 resources:
   bugtracker: https://github.com/ranguard/Plack-Middleware-TemplateToolkit/issues
   repository: https://github.com/ranguard/Plack-Middleware-TemplateToolkit
-version: 0.2
+version: 0.25

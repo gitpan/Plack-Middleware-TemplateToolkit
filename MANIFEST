@@ -8,8 +8,12 @@ Makefile.PL
 README
 app.psgi
 dist.ini
-examples/hello/app.psgi
-examples/hello/index.html
+example/app.psgi
+example/button.svg
+example/footer.tt
+example/header.tt
+example/index.html
+example/sample.css
 lib/Plack/Middleware/Debug/TemplateToolkit.pm
 lib/Plack/Middleware/TemplateToolkit.pm
 t/00_compile.t
@@ -17,10 +21,10 @@ t/10_app.t
 t/20_enable.t
 t/30_errordocs.t
 t/40_utf8.t
+t/50_ttpath.t
 t/90_deprecated.t
 t/app_tests.pl
 t/release-no-tabs.t
-t/release-pod-coverage.t
 t/release-pod-syntax.t
 t/root/404.html
 t/root/500.html

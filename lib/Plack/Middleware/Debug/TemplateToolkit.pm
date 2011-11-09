@@ -1,6 +1,6 @@
 package Plack::Middleware::Debug::TemplateToolkit;
-BEGIN {
-  $Plack::Middleware::Debug::TemplateToolkit::VERSION = '0.2';
+{
+  $Plack::Middleware::Debug::TemplateToolkit::VERSION = '0.25';
 }
 # ABSTRACT: Debug panel for Template Toolkit middleware
 

@@ -1,6 +1,6 @@
 package Plack::Middleware::TemplateToolkit;
 {
-  $Plack::Middleware::TemplateToolkit::VERSION = '0.25';
+  $Plack::Middleware::TemplateToolkit::VERSION = '0.26';
 }
 # ABSTRACT: Serve files with Template Toolkit and Plack
 
@@ -172,8 +172,10 @@ sub process_error {
         unless blessed $req && $req->isa('Plack::Request');
     eval { $self->_set_vars($req); };
 
-    $req->env->{'tt.vars'}->{'error'} = $error;
-    $req->env->{'tt.vars'}->{'path'}  = $req->path_info;
+    $req->env->{'tt.vars'}->{'error'}   = $error;
+    $req->env->{'tt.vars'}->{'path'}    = $req->path_info;
+    $req->env->{'tt.vars'}->{'request'} = $req;
+    
     my $tpl = $self->{$code};
     my $res = $self->process_template( $tpl, $code, $req->env->{'tt.vars'} );
 
@@ -352,7 +354,7 @@ Enable this middleware or application to allow your Plack-based application to
 serve files processed through L<Template Toolkit|Template> (TT). The idea
 behind this module is to provide content that is ALMOST static, but where
 having the power of TT can make the content easier to manage. You probably
-only want to use this for the simpliest of sites, but it should be easy
+only want to use this for the simplest of sites, but it should be easy
 enough to migrate to something more significant later.
 
 As L<Plack::Middleware> derives from L<Plack::Component> you can also use
@@ -475,10 +477,10 @@ environment.
 =item 404 and 500
 
 Specifies an error template that is processed when a file was not found (404)
-or on server error (500). The template variables C<error> with an error message
-and C<path> with the request path are set for processing. If an error template
-count not be found and processed, another error with status code 500 is
-returned, possibly also as template.
+or on server error (500). The template variables C<error> with an error message,
+C<path> with the request path, and C<request> with the request objects are set 
+for processing. If an error template count not be found and processed, another
+error with status code 500 is returned, possibly also as template.
 
 =back
 

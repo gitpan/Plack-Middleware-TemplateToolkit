@@ -5,7 +5,7 @@
       "Jakob Voss"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300000, CPAN::Meta::Converter version 2.110930001",
+   "generated_by" : "Dist::Zilla version 4.300018, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -22,35 +22,35 @@
       },
       "runtime" : {
          "requires" : {
-            "Carp" : 0,
-            "Encode" : 0,
-            "Exporter" : 0,
-            "HTTP::Status" : 0,
-            "Plack::MIME" : 0,
-            "Plack::Middleware" : 0,
-            "Plack::Middleware::Debug::Base" : 0,
-            "Plack::Middleware::Debug::Timer" : 0,
+            "Carp" : "0",
+            "Encode" : "0",
+            "Exporter" : "0",
+            "HTTP::Status" : "0",
+            "Plack::MIME" : "0",
+            "Plack::Middleware" : "0",
+            "Plack::Middleware::Debug::Base" : "0",
+            "Plack::Middleware::Debug::Timer" : "0",
             "Plack::Request" : "0.994",
-            "Plack::Util::Accessor" : 0,
-            "Scalar::Util" : 0,
+            "Plack::Util::Accessor" : "0",
+            "Scalar::Util" : "0",
             "Template" : "2",
-            "Time::HiRes" : 0,
-            "parent" : 0,
+            "Time::HiRes" : "0",
+            "parent" : "0",
             "perl" : "5.008_001",
-            "strict" : 0,
-            "warnings" : 0
+            "strict" : "0",
+            "warnings" : "0"
          }
       },
       "test" : {
          "requires" : {
-            "File::Spec" : 0,
-            "HTTP::Request" : 0,
-            "HTTP::Request::Common" : 0,
-            "Plack::Builder" : 0,
-            "Plack::Middleware::ErrorDocument" : 0,
-            "Plack::Test" : 0,
+            "File::Spec" : "0",
+            "HTTP::Request" : "0",
+            "HTTP::Request::Common" : "0",
+            "Plack::Builder" : "0",
+            "Plack::Middleware::ErrorDocument" : "0",
+            "Plack::Test" : "0",
             "Test::More" : "0.98",
-            "Test::Warn" : 0
+            "Test::Warn" : "0"
          }
       }
    },
@@ -65,6 +65,6 @@
          "web" : "https://github.com/ranguard/Plack-Middleware-TemplateToolkit"
       }
    },
-   "version" : "0.25"
+   "version" : "0.26"
 }
 

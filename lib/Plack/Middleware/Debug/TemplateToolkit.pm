@@ -1,9 +1,6 @@
 package Plack::Middleware::Debug::TemplateToolkit;
-{
-  $Plack::Middleware::Debug::TemplateToolkit::VERSION = '0.26';
-}
 # ABSTRACT: Debug panel for Template Toolkit middleware
-
+$Plack::Middleware::Debug::TemplateToolkit::VERSION = '0.27';
 use strict;
 use warnings;
 use 5.008_001;
@@ -42,6 +39,10 @@ sub run {
 
 __END__
 
+=head1 NAME
+
+  Plack::Middleware::Debug::TemplateToolkit - debug panel for TemplateToolkit
+
 =head1 SYNOPSIS
 
     builder {
@@ -58,7 +59,7 @@ __END__
 =head1 DESCRIPTION
 
 This L<Plack::Middleware::Debug> Panel shows which template and template
-variables have been processed, and possibly other C<tt.> PSGI environment 
+variables have been processed, and possibly other C<tt.> PSGI environment
 variables.
 
 =head1 AUTHOR
